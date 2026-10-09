@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>فحص أهلية الماجستير المهني في التدريس</title>
+<style>
+:root{--bg:#f3f6f4;--card:#fff;--ink:#17302b;--mute:#5d726c;--line:#d5e0db;--main:#2f7a6b;--head:#3f8a67;--ok:#1e7d4f;--okbg:#e4f4ea;--no:#b3392f;--nobg:#fbe9e7;--warn:#9a6a00;--warnbg:#fff3d6;
+box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#101a17;--card:#17251f;--ink:#e6f1ed;--mute:#9db3ab;--line:#2b3f37;--main:#5fb7a3;--head:#2d6b4d;--ok:#6fdc9f;--okbg:#173a28;--no:#ff9288;--nobg:#3d1d1a;--warn:#f0c24d;--warnbg:#3a2f10}}
+:root[data-theme="dark"]{--bg:#101a17;--card:#17251f;--ink:#e6f1ed;--mute:#9db3ab;--line:#2b3f37;--main:#5fb7a3;--head:#2d6b4d;--ok:#6fdc9f;--okbg:#173a28;--no:#ff9288;--nobg:#3d1d1a;--warn:#f0c24d;--warnbg:#3a2f10}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:"IBM Plex Sans Arabic","Noto Sans Arabic",Tahoma,sans-serif;line-height:1.7}
+main{max-width:560px;margin:0 auto;padding:20px 16px 40px}
+h1{font-size:1.5rem;line-height:1.35;margin:8px 0 4px;color:var(--main)}
+.sub{color:var(--mute);margin:0 0 18px;font-size:.95rem}
+section{background:var(--card);border:1px solid var(--line);border-radius:12px;margin-bottom:14px;overflow:hidden}
+section>h2{margin:0;background:var(--head);color:#fff;font-size:1rem;padding:9px 14px}
+.body{padding:14px}
+label{display:block;font-weight:600;margin:0 0 6px;font-size:.95rem}
+.hint{font-weight:400;color:var(--mute);font-size:.85rem;display:block}
+input,select{width:100%;font:inherit;padding:10px 12px;border:1px solid var(--line);border-radius:8px;background:var(--bg);color:var(--ink);min-height:44px}
+input:focus-visible,select:focus-visible,button:focus-visible{outline:3px solid var(--main);outline-offset:2px}
+.row{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px}
+.row.one{grid-template-columns:1fr}
+.field{margin-bottom:12px}.field:last-child{margin-bottom:0}
+.live{margin-top:10px;font-size:.9rem;padding:8px 10px;border-radius:8px;display:none}
+.live.show{display:block}
+.ok{background:var(--okbg);color:var(--ok)}.no{background:var(--nobg);color:var(--no)}.warn{background:var(--warnbg);color:var(--warn)}
+button{font:inherit;font-weight:700;width:100%;min-height:48px;border:0;border-radius:10px;background:var(--main);color:#fff;cursor:pointer}
+:root:not([data-theme="light"]) button{color:#06201a}
+#res{margin-top:14px}
+.verdict{padding:14px;border-radius:12px;font-weight:700;font-size:1.1rem;margin-bottom:10px}
+ul{list-style:none;margin:0;padding:0}
+li{display:flex;gap:10px;padding:10px 12px;border-radius:8px;margin-bottom:8px;font-size:.93rem}
+li b{flex:none;width:1.4em;text-align:center}
+.foot{color:var(--mute);font-size:.82rem;margin-top:16px}
+</style>
+</head>
+<body>
+<main>
+<h1>فحص أهلية الماجستير المهني في التدريس</h1>
+<p class="sub">عبّ البيانات وشوف هل تنطبق عليك شروط التقديم ووش السبب إذا ما انطبقت.</p>
+
+<section><h2>١. التخصص</h2><div class="body">
+<div class="field"><label for="spec">التخصص المراد التقديم عليه</label>
+<select id="spec"><option value="">اختر التخصص</option>
+<option>الكيمياء</option><option>الرياضيات</option><option>الإنجليزية</option><option>العربية</option><option>الحاسب الآلي</option><option>التربية الاجتماعية والوطنية</option><option>التربية الإسلامية</option><option>الأحياء</option><option>العلوم</option><option>الفيزياء</option></select></div>
+<div class="field"><label for="deg">هل عندك درجة البكالوريوس؟</label>
+<select id="deg"><option value="">اختر</option><option value="y">نعم</option><option value="n">لا</option></select></div>
+</div></section>
+
+<section><h2>٢. المعدل التراكمي في البكالوريوس</h2><div class="body">
+<div class="row"><div><label for="scale">نظام المعدل</label>
+<select id="scale"><option value="5">من 5</option><option value="4">من 4</option><option value="100">من 100</option></select></div>
+<div><label for="gpa">معدلك</label><input id="gpa" type="number" inputmode="decimal" step="0.01" min="0" placeholder="مثال: 4.2"></div></div>
+<div id="gpaLive" class="live"></div>
+<span class="hint" style="margin-top:8px">الحد الأدنى: 3.75 من 5 أو 2.75 من 4 أو 80 من 100</span>
+</div></section>
+
+<section><h2>٣. اختبار الرخصة المهنية</h2><div class="body">
+<div class="field"><label for="score">درجتك في اختبار الرخصة المهنية</label><input id="score" type="number" inputmode="decimal" min="0" max="100" placeholder="مثال: 62"><div id="scoreLive" class="live"></div></div>
+<div class="field"><label for="date">تاريخ آخر اختبار</label><input id="date" type="date"><div id="dateLive" class="live"></div></div>
+<span class="hint">الحد الأدنى للدرجة: 50 — والاختبار صالح 5 سنوات من تاريخه</span>
+</div></section>
+
+<button id="go" type="button">تحقق من الأهلية</button>
+<div id="res" aria-live="polite"></div>
+<p class="foot">هذي الأداة تفحص الشروط المنشورة فقط. القبول النهائي يعتمد أيضاً على المفاضلة (المعدل 40%، المقابلة الشخصية 60%) واختبار التخصص.</p>
+</main>
+<script>
+const MIN_SCORE=50, MIN_GPA={5:3.75,4:2.75,100:80}, YEARS=5;
+const $=id=>document.getElementById(id);
+const fmt=d=>d.toLocaleDateString('ar-SA-u-ca-gregory',{year:'numeric',month:'long',day:'numeric'});
+function live(el,cls,msg){el.className='live show '+cls;el.textContent=msg}
+function clear(el){el.className='live';el.textContent=''}
+function gpaCheck(){const v=parseFloat($('gpa').value),s=$('scale').value,min=MIN_GPA[s];
+ if(isNaN(v)) return null;
+ if(v>Number(s)) return {ok:false,invalid:true,msg:'المعدل أكبر من الحد الأعلى للنظام ('+s+')'};
+ return v>=min?{ok:true,msg:'معدلك '+v+' من '+s+' — يساوي أو أعلى من '+min}:{ok:false,msg:'معدلك '+v+' من '+s+' — أقل من الحد الأدنى '+min}}
+function dateCheck(){const v=$('date').value; if(!v) return null;
+ const d=new Date(v+'T00:00:00'),exp=new Date(d);exp.setFullYear(exp.getFullYear()+YEARS);
+ const now=new Date();now.setHours(0,0,0,0);
+ if(d>now) return {ok:false,invalid:true,msg:'تاريخ الاختبار في المستقبل، تأكد من التاريخ'};
+ const days=Math.round((exp-now)/864e5);
+ if(days>=0) return {ok:true,msg:'الاختبار ساري حتى '+fmt(exp)+' (باقي '+days+' يوم)'};
+ return {ok:false,msg:'انتهت صلاحية الاختبار بتاريخ '+fmt(exp)+' (مضى عليه أكثر من '+YEARS+' سنوات)'}}
+function scoreCheck(){const v=parseFloat($('score').value); if(isNaN(v)) return null;
+ return v>=MIN_SCORE?{ok:true,msg:'درجتك '+v+' — تساوي أو أعلى من '+MIN_SCORE}:{ok:false,msg:'درجتك '+v+' — أقل من الحد الأدنى '+MIN_SCORE}}
+function showLive(){
+ [[gpaCheck,'gpaLive'],[scoreCheck,'scoreLive'],[dateCheck,'dateLive']].forEach(([f,id])=>{const r=f();r?live($(id),r.ok?'ok':'no',(r.ok?'✓ ':'✗ ')+r.msg):clear($(id))})}
+['gpa','scale','score','date'].forEach(i=>$(i).addEventListener('input',showLive));
+$('go').onclick=()=>{
+ const items=[];
+ const sp=$('spec').value, dg=$('deg').value;
+ items.push(sp?{ok:true,t:'التخصص: '+sp}:{ok:false,t:'لم تختر التخصص'});
+ items.push(dg==='y'?{ok:true,t:'حاصل على درجة البكالوريوس'}:dg==='n'?{ok:false,t:'يشترط الحصول على درجة البكالوريوس'}:{ok:false,t:'لم تحدد هل أنت حاصل على البكالوريوس'});
+ const g=gpaCheck(); items.push(g?{ok:g.ok,t:g.msg}:{ok:false,t:'لم تدخل المعدل التراكمي'});
+ const s=scoreCheck(); items.push(s?{ok:s.ok,t:s.msg}:{ok:false,t:'لم تدخل درجة اختبار الرخصة المهنية'});
+ const d=dateCheck(); items.push(d?{ok:d.ok,t:d.msg}:{ok:false,t:'لم تدخل تاريخ آخر اختبار'});
+ const bad=items.filter(i=>!i.ok), all=!bad.length;
+ $('res').innerHTML='<div class="verdict '+(all?'ok':'no')+'">'+(all?'✓ مؤهل للتقديم — تنطبق عليك جميع الشروط':'✗ غير مؤهل حالياً — '+bad.length+(bad.length>2?' شروط غير مستوفاة':bad.length===2?' شرطان غير مستوفيين':' شرط غير مستوفى'))+'</div><ul>'+
+ items.map(i=>'<li class="'+(i.ok?'ok':'no')+'"><b>'+(i.ok?'✓':'✗')+'</b><span>'+i.t+'</span></li>').join('')+'</ul>';
+ $('res').scrollIntoView({behavior:'smooth',block:'nearest'});
+};
+</script>
+</body>
+</html>
