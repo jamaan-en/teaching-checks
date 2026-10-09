@@ -58,15 +58,18 @@ li b{flex:none;width:1.4em;text-align:center}
 <span class="hint" style="margin-top:8px">الحد الأدنى: 3.75 من 5 أو 2.75 من 4 أو 80 من 100</span>
 </div></section>
 
-<section><h2>٣. اختبار الرخصة المهنية</h2><div class="body">
-<div class="field"><label for="score">درجتك في اختبار الرخصة المهنية</label><input id="score" type="number" inputmode="decimal" min="0" max="100" placeholder="مثال: 62"><div id="scoreLive" class="live"></div></div>
-<div class="field"><label for="date">تاريخ آخر اختبار</label><input id="date" type="date"><div id="dateLive" class="live"></div></div>
-<span class="hint">الحد الأدنى للدرجة: 50 — والاختبار صالح 5 سنوات من تاريخه</span>
+<section><h2>٣. التحقق من اجتياز اختبارات الرخصة المهنية</h2><div class="body">
+<div class="live show warn" style="margin:0 0 14px">اجتياز الاختبارين مطلوب لتظهر نتيجة التقديم، لكنه لا يُحسب ضمن المفاضلة حالياً.</div>
+<div class="field"><label for="s1">درجة اختبار التخصص</label><input id="s1" type="number" inputmode="decimal" min="0" max="100" placeholder="مثال: 62"><div id="s1Live" class="live"></div></div>
+<div class="field"><label for="d1">تاريخ اختبار التخصص</label><input id="d1" type="date"><div id="d1Live" class="live"></div></div>
+<div class="field"><label for="s2">درجة اختبار التربوي العام</label><input id="s2" type="number" inputmode="decimal" min="0" max="100" placeholder="مثال: 58"><div id="s2Live" class="live"></div></div>
+<div class="field"><label for="d2">تاريخ اختبار التربوي العام</label><input id="d2" type="date"><div id="d2Live" class="live"></div></div>
+<span class="hint">الحد الأدنى لكل اختبار: 50 — والاختبار صالح 5 سنوات من تاريخه</span>
 </div></section>
 
 <button id="go" type="button">تحقق من الأهلية</button>
 <div id="res" aria-live="polite"></div>
-<p class="foot">هذي الأداة تفحص الشروط المنشورة فقط. القبول النهائي يعتمد أيضاً على المفاضلة (المعدل 40%، المقابلة الشخصية 60%) واختبار التخصص.</p>
+<p class="foot">هذي الأداة تفحص الشروط المنشورة فقط. اجتياز اختباري الرخصة المهنية مطلوب لظهور النتيجة ولا يُحسب ضمن المفاضلة حالياً. القبول النهائي يعتمد أيضاً على المفاضلة (المعدل 40%، المقابلة الشخصية 60%) واختبار التخصص.</p>
 </main>
 <script>
 const MIN_SCORE=50, MIN_GPA={5:3.75,4:2.75,100:80}, YEARS=5;
@@ -78,26 +81,27 @@ function gpaCheck(){const v=parseFloat($('gpa').value),s=$('scale').value,min=MI
  if(isNaN(v)) return null;
  if(v>Number(s)) return {ok:false,invalid:true,msg:'المعدل أكبر من الحد الأعلى للنظام ('+s+')'};
  return v>=min?{ok:true,msg:'معدلك '+v+' من '+s+' — يساوي أو أعلى من '+min}:{ok:false,msg:'معدلك '+v+' من '+s+' — أقل من الحد الأدنى '+min}}
-function dateCheck(){const v=$('date').value; if(!v) return null;
+function dateCheck(id){const v=$(id).value; if(!v) return null;
  const d=new Date(v+'T00:00:00'),exp=new Date(d);exp.setFullYear(exp.getFullYear()+YEARS);
  const now=new Date();now.setHours(0,0,0,0);
  if(d>now) return {ok:false,invalid:true,msg:'تاريخ الاختبار في المستقبل، تأكد من التاريخ'};
  const days=Math.round((exp-now)/864e5);
  if(days>=0) return {ok:true,msg:'الاختبار ساري حتى '+fmt(exp)+' (باقي '+days+' يوم)'};
  return {ok:false,msg:'انتهت صلاحية الاختبار بتاريخ '+fmt(exp)+' (مضى عليه أكثر من '+YEARS+' سنوات)'}}
-function scoreCheck(){const v=parseFloat($('score').value); if(isNaN(v)) return null;
+function scoreCheck(id){const v=parseFloat($(id).value); if(isNaN(v)) return null;
  return v>=MIN_SCORE?{ok:true,msg:'درجتك '+v+' — تساوي أو أعلى من '+MIN_SCORE}:{ok:false,msg:'درجتك '+v+' — أقل من الحد الأدنى '+MIN_SCORE}}
 function showLive(){
- [[gpaCheck,'gpaLive'],[scoreCheck,'scoreLive'],[dateCheck,'dateLive']].forEach(([f,id])=>{const r=f();r?live($(id),r.ok?'ok':'no',(r.ok?'✓ ':'✗ ')+r.msg):clear($(id))})}
-['gpa','scale','score','date'].forEach(i=>$(i).addEventListener('input',showLive));
+ [[gpaCheck,'gpaLive'],[()=>scoreCheck('s1'),'s1Live'],[()=>dateCheck('d1'),'d1Live'],[()=>scoreCheck('s2'),'s2Live'],[()=>dateCheck('d2'),'d2Live']].forEach(([f,id])=>{const r=f();r?live($(id),r.ok?'ok':'no',(r.ok?'✓ ':'✗ ')+r.msg):clear($(id))})}
+['gpa','scale','s1','d1','s2','d2'].forEach(i=>$(i).addEventListener('input',showLive));
 $('go').onclick=()=>{
  const items=[];
  const sp=$('spec').value, dg=$('deg').value;
  items.push(sp?{ok:true,t:'التخصص: '+sp}:{ok:false,t:'لم تختر التخصص'});
  items.push(dg==='y'?{ok:true,t:'حاصل على درجة البكالوريوس'}:dg==='n'?{ok:false,t:'يشترط الحصول على درجة البكالوريوس'}:{ok:false,t:'لم تحدد هل أنت حاصل على البكالوريوس'});
  const g=gpaCheck(); items.push(g?{ok:g.ok,t:g.msg}:{ok:false,t:'لم تدخل المعدل التراكمي'});
- const s=scoreCheck(); items.push(s?{ok:s.ok,t:s.msg}:{ok:false,t:'لم تدخل درجة اختبار الرخصة المهنية'});
- const d=dateCheck(); items.push(d?{ok:d.ok,t:d.msg}:{ok:false,t:'لم تدخل تاريخ آخر اختبار'});
+ [['s1','d1','اختبار التخصص'],['s2','d2','اختبار التربوي العام']].forEach(([si,di,n])=>{
+  const s=scoreCheck(si); items.push(s?{ok:s.ok,t:n+': '+s.msg}:{ok:false,t:'لم تدخل درجة '+n});
+  const d=dateCheck(di); items.push(d?{ok:d.ok,t:n+': '+d.msg}:{ok:false,t:'لم تدخل تاريخ '+n});});
  const bad=items.filter(i=>!i.ok), all=!bad.length;
  $('res').innerHTML='<div class="verdict '+(all?'ok':'no')+'">'+(all?'✓ مؤهل للتقديم — تنطبق عليك جميع الشروط':'✗ غير مؤهل حالياً — '+bad.length+(bad.length>2?' شروط غير مستوفاة':bad.length===2?' شرطان غير مستوفيين':' شرط غير مستوفى'))+'</div><ul>'+
  items.map(i=>'<li class="'+(i.ok?'ok':'no')+'"><b>'+(i.ok?'✓':'✗')+'</b><span>'+i.t+'</span></li>').join('')+'</ul>';
